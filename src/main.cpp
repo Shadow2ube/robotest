@@ -1,4 +1,5 @@
 #include "main.h"
+#include "wrappers.h"
 #include "config.h"
 #include "location.h"
 #include "pros/rtos.hpp"
@@ -12,80 +13,6 @@ void initialize() {
 void disabled() {}
 
 void competition_initialize() {}
-
-void forward(int t, int s = 127) {
-  m_fl = s;
-  m_fr = s;
-  m_bl = s;
-  m_br = s;
-  pros::delay(t);
-
-  m_fl = 0;
-  m_bl = 0;
-  m_fr = 0;
-  m_br = 0;
-}
-
-void backward(int t, int s = 127) {
-  m_fl = -s;
-  m_fr = -s;
-  m_bl = -s;
-  m_br = -s;
-  pros::delay(t);
-
-  m_fl = 0;
-  m_bl = 0;
-  m_fr = 0;
-  m_br = 0;
-}
-
-void left(int t, int s = 127) {
-  m_fl = -s;
-  m_fr = s;
-  m_bl = s;
-  m_br = -s;
-  pros::delay(t);
-
-  m_fl = 0;
-  m_bl = 0;
-  m_fr = 0;
-  m_br = 0;
-}
-
-void right(int t, int s = 127) {
-  m_fl = s;
-  m_fr = -s;
-  m_bl = -s;
-  m_br = s;
-  pros::delay(t);
-
-  m_fl = 0;
-  m_bl = 0;
-  m_fr = 0;
-  m_br = 0;
-}
-
-void turn(int t, bool right = false, int s = 127) {
-  if (right) {
-
-    m_fl = s;
-    m_bl = s;
-    m_fr = -s;
-    m_br = -s;
-  } else {
-    m_fl = -s;
-    m_bl = -s;
-    m_fr = s;
-    m_br = s;
-  }
-
-  pros::delay(t);
-
-  m_fl = 0;
-  m_bl = 0;
-  m_fr = 0;
-  m_br = 0;
-}
 
 int idle = -63;
 bool is_idle = true;
@@ -233,11 +160,6 @@ void opcontrol() {
       p_l.set_value(controller.get_digital(E_CONTROLLER_DIGITAL_Y));
       p_r.set_value(controller.get_digital(E_CONTROLLER_DIGITAL_B));
     }
-    // aim
-    // if (controller.get_digital(E_CONTROLLER_DIGITAL_L1)) {
-    // aim(s_position);
-    // }
-
     pros::delay(2);
   }
 }
