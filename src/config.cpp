@@ -1,12 +1,17 @@
+/**
+ * @brief Everything in this file is controlled by the main thread unless specified
+ */
+
 #include "main.h"
 #include "pros/misc.h"
 #include "pros/motors.h"
 #include "util.h"
 #include "buffer.h"
 
-util::ordered_pair v_position = {0, 0};
-util::ordered_pair v_velocity = {0, 0};
-Buffer<util::ordered_pair, 3> v_velocities({0.0, 0.0});
+#include <atomic>
+
+std::atomic<util::ordered_pair> v_position({0, 0});
+std::atomic<util::ordered_pair> v_velocity({0, 0});
 
 pros::Controller controller(pros::E_CONTROLLER_MASTER);
 
@@ -29,4 +34,4 @@ pros::ADIDigitalOut p_r('H');
 
 // 1 motor left will figure out what to do with it
 
-pros::Imu s_imu(7);
+pros::Imu s_imu(7); // handler: t_handle_imu

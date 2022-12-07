@@ -4,9 +4,8 @@
 #include "util.h"
 
 
-extern util::ordered_pair v_position;
-extern util::ordered_pair v_velocity;
-extern Buffer<util::ordered_pair, 4> v_velocities;
+extern std::atomic<util::ordered_pair> v_position;
+extern std::atomic<util::ordered_pair> v_velocity;
 
 extern pros::Controller controller;
 
