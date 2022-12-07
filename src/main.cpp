@@ -92,11 +92,11 @@ void opcontrol() {
 
     p_feed.set_value(controller.get_digital(E_CONTROLLER_DIGITAL_A));
 
-    if (controller.get_digital(E_CONTROLLER_DIGITAL_Y) &&
-        controller.get_digital(E_CONTROLLER_DIGITAL_Y) &&
-        controller.get_digital(E_CONTROLLER_DIGITAL_Y)) {
-      p_l.set_value(controller.get_digital(E_CONTROLLER_DIGITAL_Y));
-      p_r.set_value(controller.get_digital(E_CONTROLLER_DIGITAL_B));
+    if (controller.get_digital(E_CONTROLLER_DIGITAL_DOWN) &&
+        controller.get_digital(E_CONTROLLER_DIGITAL_LEFT) &&
+        controller.get_digital(E_CONTROLLER_DIGITAL_RIGHT)) {
+      p_l.set_value(true);
+      p_r.set_value(true);
     }
     pros::delay(2);
   }
