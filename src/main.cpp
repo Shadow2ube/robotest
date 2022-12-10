@@ -28,7 +28,37 @@ void flywheel(bool on) {
 }
 
 void autonomous() {
-  flywheel(false);
+  //ASUMING WE START AT THE RIGHT OF OUR NET
+  //start roller pointing back
+  //turn roller on
+  //go right until roller and roller are lined up
+  //go back a lil untill roller and roller are touching
+  //turn roller off in x seconds after contact is made
+  //go left untill robot is beside the net
+  //turn robot left till fly wheel faces the net
+  //shoot 2 disks while fly wheel is in idle
+  //IF EXTRA TIME:
+  //line up robot with disks so we can pick up during driver
+
+  right(2000);
+  roller(true);
+  //2 seconds because roller is on and contact will be made for the remaining time 
+  backward(2000);
+  roller(false);
+  forward(1000);
+  left(5000);
+  turn(1500);
+  shoot();
+  shoot();
+  turn(1500, true);
+  right(3000);
+  forward(1000);
+  
+  
+
+
+
+  /*flywheel(false);
   // bacward(1500);
   turn(250);
   pros::delay(2500);
@@ -39,7 +69,7 @@ void autonomous() {
   p_feed.set_value(true);
   pros::delay(100);
   p_feed.set_value(false);
-  flywheel(false);
+  flywheel(false);*/
 }
 
 void opcontrol() {
