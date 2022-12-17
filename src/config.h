@@ -1,6 +1,7 @@
 #include "main.h"
 #include "pros/misc.h"
 #include "pros/motors.h"
+#include "pros/motors.hpp"
 #include "util.h"
 
 
@@ -16,7 +17,7 @@ extern pros::Motor m_br;
 
 extern pros::Motor m_flywheel;
 extern pros::Motor m_flywheel2;
-extern pros::Motor m_suck;
+extern pros::Motor_Group m_suck;
 extern pros::Motor m_feed;
 
 extern pros::ADIDigitalOut p_l;

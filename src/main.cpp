@@ -1,8 +1,17 @@
 #include "main.h"
 #include "wrappers.h"
 #include "config.h"
-#include "location.h"
 #include "pros/rtos.hpp"
+
+inline auto map2(bool A, int a, bool B, int b) -> int {
+  /*
+   * If A -> a
+   * If B -> b
+   * If none -> 0
+   * If Both -> 0
+  */
+  return 0;
+}
 
 void initialize() {
   pros::lcd::initialize();
@@ -72,11 +81,13 @@ void autonomous() {
   flywheel(false);*/
 }
 
+bool angle = false;
+
 void opcontrol() {
-  if (!pros::competition::is_connected()) {
+  // if (!pros::competition::is_connected()) {
     // run auton here if not in competition
-    autonomous();
-  }
+    // autonomous();
+  // }
   while (true) {
     // pros::lcd::print(0, "%f, %f, %f", imu.x, imu.y, imu.z);
     // pros::lcd::print(1, "%f", imu.heading);
@@ -96,9 +107,9 @@ void opcontrol() {
            controller.get_analog(E_CONTROLLER_ANALOG_LEFT_X);
 
     if (controller.get_digital(E_CONTROLLER_DIGITAL_R1))
-      m_suck = 127;
-    else if (controller.get_digital(E_CONTROLLER_DIGITAL_L1))
       m_suck = -127;
+    else if (controller.get_digital(E_CONTROLLER_DIGITAL_L1))
+      m_suck = 127;
     else
       m_suck = 0;
 
@@ -119,6 +130,15 @@ void opcontrol() {
     if (controller.get_digital_new_press(E_CONTROLLER_DIGITAL_X)) {
       is_idle = !is_idle;
     }
+
+    if (controller.get_digital_new_press(E_CONTROLLER_DIGITAL_B)) {
+      angle = !angle;
+
+      p_l.set_value(angle);
+      p_r.set_value(angle);
+    }
+
+    if (angle) {}
 
     p_feed.set_value(controller.get_digital(E_CONTROLLER_DIGITAL_A));
 
