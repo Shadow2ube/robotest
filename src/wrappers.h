@@ -73,3 +73,7 @@ inline void turn(int t, bool right = false, int s = 127) {
   m_fr = 0;
   m_br = 0;
 }
+
+inline void intake(bool run) {
+  m_suck = run ? 127 : -127;
+}

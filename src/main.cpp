@@ -51,7 +51,7 @@ void autonomous() {
 
   right(2000);
   roller(true);
-  //2 seconds because roller is on and contact will be made for the remaining time 
+  //2 seconds because roller is on and contact will be made for the remaining time
   backward(2000);
   roller(false);
   forward(1000);
@@ -62,10 +62,14 @@ void autonomous() {
   turn(1500, true);
   right(3000);
   forward(1000);
-  
-  
+  flywheel(false);
+  // old code
 
-
+//  right(1400);
+//  backward(500);
+//  intake(false);
+//  pros::delay(100);
+//  turn(100, true);
 
   /*flywheel(false);
   // bacward(1500);
@@ -84,10 +88,10 @@ void autonomous() {
 bool angle = false;
 
 void opcontrol() {
-  // if (!pros::competition::is_connected()) {
+  if (!pros::competition::is_connected()) {
     // run auton here if not in competition
-    // autonomous();
-  // }
+    autonomous();
+  }
   while (true) {
     // pros::lcd::print(0, "%f, %f, %f", imu.x, imu.y, imu.z);
     // pros::lcd::print(1, "%f", imu.heading);
