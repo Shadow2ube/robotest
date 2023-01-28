@@ -28,6 +28,7 @@ pros::Motor m_flywheel2(6, pros::E_MOTOR_GEARSET_18, false, pros::E_MOTOR_ENCODE
 pros::Motor m_suckL(1, pros::E_MOTOR_GEARSET_36, false, pros::E_MOTOR_ENCODER_ROTATIONS); // brings disks into magazine
 pros::Motor m_suckR(10, pros::E_MOTOR_GEARSET_36, true, pros::E_MOTOR_ENCODER_ROTATIONS); // brings disks into magazine
 pros::Motor_Group m_suck({m_suckL, m_suckR});
+pros::Motor m_dpush(9, pros::E_MOTOR_GEARSET_18, false, pros::E_MOTOR_ENCODER_ROTATIONS);
 // pros::Motor m_feed(19, pros::E_MOTOR_GEARSET_36, false, pros::E_MOTOR_ENCODER_DEGREES); // feed disks into flywheel
 
 // pneumatics
