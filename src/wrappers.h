@@ -74,6 +74,29 @@ inline void turn(int t, bool right = false, int s = 127) {
   m_br = 0;
 }
 
-inline void intake(bool run) {
-  m_suck = run ? 127 : -127;
+inline void intake(bool run, bool bwd = false) {
+  m_suck = run ? (!bwd ? -127 : 127) : 0;
+}
+
+inline void shoot(bool on) {
+      intake(on, true);
+      m_feed = on ? 63 : 0;
+      // pros::delay(1000);
+      // intake(false);
+      // m_feed = 0;
+
+}
+
+inline void brake(bool on) {
+  if (brake) {
+    m_fr.set_brake_mode(E_MOTOR_BRAKE_BRAKE);
+    m_br.set_brake_mode(E_MOTOR_BRAKE_BRAKE);
+    m_fl.set_brake_mode(E_MOTOR_BRAKE_BRAKE);
+    m_bl.set_brake_mode(E_MOTOR_BRAKE_BRAKE);
+  } else {
+    m_fr.set_brake_mode(E_MOTOR_BRAKE_COAST);
+    m_br.set_brake_mode(E_MOTOR_BRAKE_COAST);
+    m_fl.set_brake_mode(E_MOTOR_BRAKE_COAST);
+    m_bl.set_brake_mode(E_MOTOR_BRAKE_COAST);
+  }
 }
