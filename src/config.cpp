@@ -11,6 +11,8 @@
 #include <atomic>
 #include <cwchar>
 
+util::pose v_current_pos = {0, 0, -45};
+
 pros::Controller controller(pros::E_CONTROLLER_MASTER);
 
 // X DRIVE

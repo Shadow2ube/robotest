@@ -3,6 +3,7 @@
 #include "wrappers.h"
 #include "config.h"
 #include "pros/rtos.hpp"
+#include "location.h"
 
 #define IEIE(X, x, Y, y, z) {if (X) {x;} else if (Y) {y;} else {z;}}
 #define IE(X, x, y) {if (X) {x;} else {y;}}
@@ -43,8 +44,6 @@ void autonomous() {
 
 }
 
-bool angle = false;
-
 void handle_drive() {
   m_fr = controller.get_analog(E_CONTROLLER_ANALOG_LEFT_Y)
     - controller.get_analog(E_CONTROLLER_ANALOG_RIGHT_X)
@@ -60,12 +59,23 @@ void handle_drive() {
     - controller.get_analog(E_CONTROLLER_ANALOG_LEFT_X);
 }
 
+// void handle_drive() {
+//   m_fl = controller.get_analog(E_CONTROLLER_ANALOG_LEFT_Y);
+//   m_br = controller.get_analog(E_CONTROLLER_ANALOG_LEFT_Y);
+//   m_bl = -controller.get_analog(E_CONTROLLER_ANALOG_LEFT_X);
+//   m_fr = -controller.get_analog(E_CONTROLLER_ANALOG_LEFT_X);
+// }
+
 void opcontrol() {
   if (!pros::competition::is_connected()) {
   //   // run auton here if not in competition
     // autonomous();
   }
+
+  brake(true); // TODO: remove this for driver
   while (true) {
+    find_location();
+
     // drive control
     if (controller.get_digital_new_press(E_CONTROLLER_DIGITAL_X)) { 
       is_idle = !is_idle;

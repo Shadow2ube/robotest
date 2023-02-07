@@ -4,6 +4,13 @@
 #include "pros/motors.hpp"
 #include "util.h"
 
+// extern const float c_lateral_dist; // mm
+// extern const float c_forward_offset; //mm
+// extern const float c_wheel_OD; //mm
+// extern const float c_dist_per_deg; //mm
+
+extern util::pose v_current_pos;
+
 extern pros::Controller controller;
 
 extern pros::Motor m_fl;
