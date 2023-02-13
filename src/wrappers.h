@@ -81,14 +81,19 @@ inline void intake(bool run, bool bwd = false) {
 inline void shoot(bool on) {
       intake(on, true);
       m_feed = on ? 63 : 0;
-      // pros::delay(1000);
-      // intake(false);
-      // m_feed = 0;
+}
+
+inline void shoot(int s = 100) {
+      intake(true, true);
+      m_feed = 63;
+      pros::delay(1000);
+      intake(false);
+      m_feed = 0;
 
 }
 
 inline void brake(bool on) {
-  if (brake) {
+  if (on) {
     m_fr.set_brake_mode(E_MOTOR_BRAKE_BRAKE);
     m_br.set_brake_mode(E_MOTOR_BRAKE_BRAKE);
     m_fl.set_brake_mode(E_MOTOR_BRAKE_BRAKE);
