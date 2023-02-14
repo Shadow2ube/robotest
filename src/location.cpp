@@ -68,8 +68,6 @@ util::ordered_pair get_wheel_deltas(util::pose to) {
   return distance / c_wheel_circ * 900.0 / 2;
 }
 
-#define EPM(X, Y, y) ((X < Y + y) && (X > Y - y))
-
 void move_to(util::pose to, int speed) {
   auto d = get_wheel_deltas(to);
 

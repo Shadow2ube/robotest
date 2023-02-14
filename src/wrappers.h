@@ -1,5 +1,8 @@
 #include "config.h"
 
+#ifndef WRAPPERS_H
+#define WRAPPERS_H
+
 inline void forward(int t, int s = 127) {
   m_fl = s;
   m_fr = s;
@@ -74,22 +77,27 @@ inline void turn(int t, bool right = false, int s = 127) {
   m_br = 0;
 }
 
+extern bool run_intake; // from config.cpp
 inline void intake(bool run, bool bwd = false) {
-  m_suck = run ? (!bwd ? -127 : 127) : 0;
+  if (run_intake) {
+    m_suck = run ? (bwd ? -127 : 127) : 0;
+  } else {
+    m_suck = 0;
+    // run_intake = true;
+  }
 }
 
 inline void shoot(bool on) {
-      intake(on, true);
-      m_feed = on ? 63 : 0;
+  intake(on, true);
+  m_feed = on ? 63 : 0;
 }
 
 inline void shoot(int s = 100) {
-      intake(true, true);
-      m_feed = 63;
-      pros::delay(1000);
-      intake(false);
-      m_feed = 0;
-
+  intake(true, true);
+  m_feed = 63;
+  pros::delay(1000);
+  intake(false);
+  m_feed = 0;
 }
 
 inline void brake(bool on) {
@@ -105,3 +113,5 @@ inline void brake(bool on) {
     m_bl.set_brake_mode(E_MOTOR_BRAKE_COAST);
   }
 }
+
+#endif

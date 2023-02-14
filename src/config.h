@@ -3,7 +3,11 @@
 #include "pros/misc.h"
 #include "pros/motors.h"
 #include "pros/motors.hpp"
+#include "pros/optical.hpp"
 #include "util.h"
+
+#define EPM(X, Y, y) ((X < Y + y) && (X > Y - y))
+#define NPM(X, Y, y) ((X > Y + y) || (X < Y - y))
 
 // extern const float c_lateral_dist; // mm
 // extern const float c_forward_offset; //mm
@@ -27,6 +31,7 @@ extern pros::Motor m_feed;
 extern pros::ADIEncoder s_encoder;
 extern pros::ADIEncoder f_encoder;
 extern pros::IMU s_imu;
+extern pros::Optical s_optical;
 
 
 extern pros::ADIDigitalOut p_end_main;

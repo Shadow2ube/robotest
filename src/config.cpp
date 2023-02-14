@@ -8,10 +8,13 @@
 #include "pros/misc.h"
 #include "pros/motors.h"
 #include "pros/motors.hpp"
+#include "pros/optical.hpp"
 #include "util.h"
 
 #include <atomic>
 #include <cwchar>
+
+bool run_intake = true;
 
 util::pose v_current_pos = {0, 0, -util::pi/4};
 
@@ -35,6 +38,7 @@ pros::ADIEncoder s_encoder('H', 'G', false);
 pros::ADIEncoder f_encoder('E', 'F', false);
 
 pros::IMU s_imu(13);
+pros::Optical s_optical(3);
 
 // pneumatics
 
