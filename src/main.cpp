@@ -204,7 +204,7 @@ void opcontrol() {
       if (controller2.get_digital(E_CONTROLLER_DIGITAL_Y))
         p_end_left.set_value(1);
 
-      if (controller2.get_digital(E_CONTROLLER_DIGITAL_Y))
+      if (controller2.get_digital(E_CONTROLLER_DIGITAL_A))
         p_end_right.set_value(1);
 
       // endregion
