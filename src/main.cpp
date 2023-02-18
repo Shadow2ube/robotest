@@ -1,6 +1,7 @@
 #include "main.h"
 #include "config.h"
 #include "location.h"
+#include "pros/misc.hpp"
 #include "pros/rtos.h"
 #include "pros/rtos.hpp"
 #include "wrappers.h"
@@ -45,7 +46,7 @@ void t_update_colors(void *param) {
       }
       if (current_color == -1)
         current_color = s_optical.get_hue();
-      else if (!EPM(s_optical.get_hue(), current_color, 10)) {
+      else if (!EPM(s_optical.get_hue(), current_color, 8)) {
         run_intake = false;
       }
     } else {
@@ -58,17 +59,12 @@ void t_update_colors(void *param) {
 
 void initialize() {
   pros::lcd::initialize();
+  s_imu.tare();
+  // s_imu.reset(true);
   Task update_colors(t_update_colors);
 }
 
 void disabled() {}
-
-int prev_s_encoder_val = 0;
-int prev_f_encoder_val = 0;
-void getPos() {
-  int delta_s = s_encoder.get_value() - prev_s_encoder_val;
-  int delta_f = s_encoder.get_value() - prev_f_encoder_val;
-}
 
 void competition_initialize() {}
 
@@ -76,37 +72,72 @@ int idle = -127;
 // int idle = -105;
 bool is_idle = true;
 
+// void autonomous() {
+//   brake(true);
+
+//   m_flywheel = -127;
+//   intake(true);
+//   forward(180);
+//   right(820);
+//   pros::delay(200);
+//   backward(320, 100);
+//   pros::delay(100);
+//   pros::delay(150);
+//   intake(false);
+//   // pros::delay(90);
+
+//   forward(150, 63);
+//   turn(30, true);
+//   pros::delay(2000);
+//   // shoot();
+//   intake(true);
+//   m_feed = 40;
+//   pros::delay(1000);
+//   intake(false);
+//   m_feed = 0;
+//   pros::delay(500);
+//   intake(true);
+//   m_feed = 40;
+//   pros::delay(1500);
+//   intake(false);
+//   m_feed = 0;
+
+//   intake(false);
+//   brake(false);
+// }
+
 void autonomous() {
+  auto prev_idle = idle;
   brake(true);
 
   m_flywheel = -127;
-  forward(160);
-  right(750);
-  pros::delay(100);
-  backward(320, 100);
-  intake(true);
-  pros::delay(150);
-  intake(false);
-  // pros::delay(90);
-
-  forward(100, 63);
-  turn(40, true);
-  pros::delay(2000);
-  // shoot();
-  intake(true);
-  m_feed = 40;
   pros::delay(1000);
-  intake(false);
-  m_feed = 0;
-  pros::delay(500);
   intake(true);
-  m_feed = 40;
-  pros::delay(1500);
-  intake(false);
-  m_feed = 0;
+  forward(1200, 70);
+  pros::delay(500);
+  turn(130, true, 127);
+  backward(600, 70);
+  // pros::delay(1400);
+  pros::delay(100); //REMOVE
+  // m_feed = 60;
+  // pros::delay(1000);
+  // m_feed = 0;
 
-  intake(false);
+  forward(600, 70);
+  turn(365);
+  pros::delay(100);
+  forward(900);
+  pros::delay(100);
+  turn(365, true);
+  //shoot again
+  // turn(200);
+  // backward(1000);
+  // turn(100, true);
+  // backward(350);
+
+   pros::delay(100);
   brake(false);
+  idle = prev_idle;
 }
 
 void handle_drive() {
@@ -124,14 +155,22 @@ void handle_drive() {
          controller.get_analog(E_CONTROLLER_ANALOG_LEFT_X);
 }
 
+// void handle_drive() {
+//   m_fr = -controller.get_analog(E_CONTROLLER_ANALOG_RIGHT_X) -
+//          controller.get_analog(E_CONTROLLER_ANALOG_LEFT_X);
+//   m_br = -controller.get_analog(E_CONTROLLER_ANALOG_RIGHT_X) +
+//          controller.get_analog(E_CONTROLLER_ANALOG_LEFT_X);
+//   m_fl = controller.get_analog(E_CONTROLLER_ANALOG_RIGHT_X) +
+//          controller.get_analog(E_CONTROLLER_ANALOG_LEFT_X);
+//   m_bl = controller.get_analog(E_CONTROLLER_ANALOG_RIGHT_X) -
+//          controller.get_analog(E_CONTROLLER_ANALOG_LEFT_X);
+// }
+
 void opcontrol() {
   if (!pros::competition::is_connected()) {
     //   // run auton here if not in competition
     // autonomous();
   }
-
-  double current_color = s_optical.get_hue();
-  intake(true);
 
   while (true) {
     find_location();
@@ -158,9 +197,17 @@ void opcontrol() {
         controller2.get_digital(E_CONTROLLER_DIGITAL_R1) &&
         controller2.get_digital(E_CONTROLLER_DIGITAL_L2) &&
         controller2.get_digital(E_CONTROLLER_DIGITAL_R2)) {
-      // ENDGAME SHENANIGANS
+      // region ENGAME_STUFF
       if (controller2.get_digital(E_CONTROLLER_DIGITAL_X))
-        p_end_main.set_value(E_CONTROLLER_DIGITAL_X);
+        p_end_main.set_value(1);
+      
+      if (controller2.get_digital(E_CONTROLLER_DIGITAL_Y))
+        p_end_left.set_value(1);
+
+      if (controller2.get_digital(E_CONTROLLER_DIGITAL_Y))
+        p_end_right.set_value(1);
+
+      // endregion
     }
 
     pros::delay(2);

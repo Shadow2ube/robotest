@@ -28,10 +28,12 @@ extern pros::Motor m_flywheel;
 extern pros::Motor_Group m_suck;
 extern pros::Motor m_feed;
 
-extern pros::ADIEncoder s_encoder;
-extern pros::ADIEncoder f_encoder;
+extern pros::ADIEncoder s_para;
+extern pros::ADIEncoder s_perp;
+
 extern pros::IMU s_imu;
 extern pros::Optical s_optical;
 
-
+extern pros::ADIDigitalOut p_end_right;
+extern pros::ADIDigitalOut p_end_left;
 extern pros::ADIDigitalOut p_end_main;

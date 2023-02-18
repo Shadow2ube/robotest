@@ -1,6 +1,6 @@
+#include "main.h"
 #include <cmath>
 #include <vector>
-#include "main.h"
 
 #ifndef UTIL_H_
 #define UTIL_H_
@@ -14,52 +14,32 @@ struct pose {
   float y;
   float angle;
 
-  pose operator-(pose b) {
-    return {
-      x - b.x,
-      y - b.y, 
-      angle - b.angle
-    };
-  }
+  pose operator-(pose b) { return {x - b.x, y - b.y, angle - b.angle}; }
 };
+inline float to_rad(float in) { return in * util::pi / 180; }
 
 struct ordered_pair {
   float x, y;
 
-  ordered_pair operator/(float in) {
-    return {x / in, y / in};
-  }
+  ordered_pair operator/(float in) { return {x / in, y / in}; }
 
-  ordered_pair operator*(float in) {
-    return {x * in, y * in};
-  }
+  ordered_pair operator*(float in) { return {x * in, y * in}; }
 
-  ordered_pair operator+(ordered_pair b) {
-    return {
-      x + b.x,
-      y + b.y
-    };
-  }
+  ordered_pair operator+(ordered_pair b) { return {x + b.x, y + b.y}; }
 
-  ordered_pair operator+(float b) {
-    return {
-      x + b,
-      y + b
-    };
-  }
+  ordered_pair operator+(float b) { return {x + b, y + b}; }
 };
 
 inline ordered_pair split_vec(float magnitude, float angle) {
-  return {
-    magnitude * ((float) cos(angle)),
-    magnitude * ((float) sin(angle))
-  };
+  return {magnitude * ((float)cos(angle)), magnitude * ((float)sin(angle))};
 }
 
+inline std::tuple<float, float> to_vec(float x, float y) {
+  return {std::sqrt(x * x + y * y), atan(y / x)};
 }
 
-inline float operator ""_deg(long double in) {
-  return in * util::pi / 180;
-}
+} // namespace util
+
+inline float operator""_deg(long double in) { return in * util::pi / 180; }
 
 #endif // UTIL_H_
