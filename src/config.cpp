@@ -34,7 +34,7 @@ pros::Motor m_suckR(10, pros::E_MOTOR_GEARSET_18, false, pros::E_MOTOR_ENCODER_R
 pros::Motor_Group m_suck({m_suckL, m_suckR});
 pros::Motor m_feed(18, pros::E_MOTOR_GEARSET_18, false, pros::E_MOTOR_ENCODER_ROTATIONS);
 
-pros::ADIEncoder s_perp('H', 'G', false);
+pros::ADIEncoder s_perp('G', 'H', false);
 pros::ADIEncoder s_para('E', 'F', false);
 
 pros::IMU s_imu(13);

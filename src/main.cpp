@@ -4,6 +4,7 @@
 #include "pros/misc.hpp"
 #include "pros/rtos.h"
 #include "pros/rtos.hpp"
+#include "pros/screen.hpp"
 #include "wrappers.h"
 #include <cstdlib>
 
@@ -57,11 +58,22 @@ void t_update_colors(void *param) {
   }
 }
 
+void t_update_location(void *param) {
+  while (true) {
+    find_location();
+    pros::delay(2);
+  }
+}
+
 void initialize() {
   pros::lcd::initialize();
   s_imu.tare();
-  // s_imu.reset(true);
+  s_imu.reset(true);
   Task update_colors(t_update_colors);
+  Task update_location(t_update_location);
+
+  pros::screen::set_pen(0xFF00FF);
+  pros::screen::draw_rect(1, 1, 479, 239);
 }
 
 void disabled() {}
@@ -106,38 +118,47 @@ bool is_idle = true;
 //   brake(false);
 // }
 
+// void autonomous() {
+//   auto prev_idle = idle;
+//   brake(true);
+
+//   m_flywheel = -127;
+//   pros::delay(1000);
+//   intake(true);
+//   forward(1200, 70);
+//   pros::delay(500);
+//   turn(130, true, 127);
+//   backward(600, 70);
+//   // pros::delay(1400);
+//   pros::delay(100); //REMOVE
+//   // m_feed = 60;
+//   // pros::delay(1000);
+//   // m_feed = 0;
+
+//   forward(600, 70);
+//   turn(365);
+//   pros::delay(100);
+//   forward(900);
+//   pros::delay(100);
+//   turn(365, true);
+//   //shoot again
+//   // turn(200);
+//   // backward(1000);
+//   // turn(100, true);
+//   // backward(350);
+
+//    pros::delay(100);
+//   brake(false);
+//   idle = prev_idle;
+// }
+
 void autonomous() {
-  auto prev_idle = idle;
-  brake(true);
-
-  m_flywheel = -127;
+  m_fl = -63;
+  m_fr = 63;
+  m_bl = 63;
+  m_br = -63;
   pros::delay(1000);
-  intake(true);
-  forward(1200, 70);
-  pros::delay(500);
-  turn(130, true, 127);
-  backward(600, 70);
-  // pros::delay(1400);
-  pros::delay(100); //REMOVE
-  // m_feed = 60;
-  // pros::delay(1000);
-  // m_feed = 0;
-
-  forward(600, 70);
-  turn(365);
-  pros::delay(100);
-  forward(900);
-  pros::delay(100);
-  turn(365, true);
-  //shoot again
-  // turn(200);
-  // backward(1000);
-  // turn(100, true);
-  // backward(350);
-
-   pros::delay(100);
-  brake(false);
-  idle = prev_idle;
+  move_to(0, -20, 0);
 }
 
 void handle_drive() {
@@ -171,9 +192,9 @@ void opcontrol() {
     //   // run auton here if not in competition
     // autonomous();
   }
-
+  move_to(0, 0, util::pi/2);
   while (true) {
-    find_location();
+    // find_location();
     handle_drive();
 
     // drive control
@@ -200,7 +221,7 @@ void opcontrol() {
       // region ENGAME_STUFF
       if (controller2.get_digital(E_CONTROLLER_DIGITAL_X))
         p_end_main.set_value(1);
-      
+
       if (controller2.get_digital(E_CONTROLLER_DIGITAL_Y))
         p_end_left.set_value(1);
 

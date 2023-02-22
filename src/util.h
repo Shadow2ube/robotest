@@ -38,6 +38,18 @@ inline std::tuple<float, float> to_vec(float x, float y) {
   return {std::sqrt(x * x + y * y), atan(y / x)};
 }
 
+inline float round_down_to(float in, int prec) {
+  // TODO: do the things here to round down
+  auto d = pow(10, prec);
+  auto temp = (int)(in * d + 0.5);
+  return (float)(temp / d);
+}
+
+inline float abs(float in) {
+  if (in >= 0) return in;
+  return -in;
+}
+
 } // namespace util
 
 inline float operator""_deg(long double in) { return in * util::pi / 180; }
