@@ -144,52 +144,6 @@ bool is_slow_idle = false;
 //   brake(false);
 // }
 
-// void auton_skills() { // new 1
-//   brake(true);
-//   m_flywheel = -125;
-
-//   pros::delay(2000);
-//   intake(true);
-//   backward(180);
-//   forward(170);
-//   turn(430, true);
-
-// #pragma region volley 1 => preloads
-//   intake(true, 100);
-//   m_feed = 127;
-//   pros::delay(2000);
-//   m_feed = 0;
-// #pragma endregion
-
-//   turn(100);
-//   forward(2600, 80);
-//   turn(420, true);
-//   pros::delay(1500);
-
-// #pragma region volley 2 => 3 stack
-//   m_feed = 127;
-//   pros::delay(3000);
-//   m_feed = 0;
-// #pragma endregion
-
-//   turn(260);
-//   // forward(750);
-//   // forward(750);
-//   // right(150);
-//   forward(1700);
-//   turn(645, true);
-
-// #pragma region volley 2 => 3 stack
-//   m_feed = 127;
-//   pros::delay(3000);
-//   m_feed = 0;
-// #pragma endregion
-
-//   m_flywheel = 0;
-//   intake(false);
-//   brake(false);
-// }
-
 void auton_skills(bool half = false) { // newest
   brake(true);
   flywheel(100);

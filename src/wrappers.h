@@ -118,12 +118,11 @@ inline void brake(bool on) {
   }
 }
 
-inline void wait_until_speed(int speed) {
+inline void wait_until_speed(int speed, int pm=5) {
   speed *= speed > 0 ? -1 : 1;
-  while (m_flywheel.get_actual_velocity() != speed) {
+  while (NPM<int>(m_flywheel.get_actual_velocity(), speed, pm)) {
     pros::delay(2);
   }
-
 }
 
 /**

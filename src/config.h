@@ -6,13 +6,35 @@
 #include "pros/optical.hpp"
 #include "util.h"
 
-#define EPM(X, Y, y) ((X < Y + y) && (X > Y - y))
-#define NPM(X, Y, y) ((X > Y + y) || (X < Y - y))
+/**
+ * @brief Equal to, plus or minus
+ * 
+ * @tparam T - the type of variable
+ * @param X - the value to be within the range
+ * @param Y - the value X must be near
+ * @param y - the range
+ * @return true - (Y + y > X > Y - y)
+ * @return false - !(Y + y > X > Y - y)
+ */
+template<typename T>
+inline bool EPM(T X, T Y, T y) {
+    return (X < Y + y) && (X > Y - y);
+}
 
-// extern const float c_lateral_dist; // mm
-// extern const float c_forward_offset; //mm
-// extern const float c_wheel_OD; //mm
-// extern const float c_dist_per_deg; //mm
+/**
+ * @brief Not equal to, plus or minus
+ * 
+ * @tparam T - the type of variable
+ * @param X - the value to not be in the range
+ * @param Y - the value X must not be near
+ * @param y - the range
+ * @return true - (Y + y < X < Y - y)
+ * @return false - !(Y + y < X) or !(X < Y - y)
+ */
+template<typename T>
+inline bool NPM(T X, T Y, T y) {
+    return (X > Y + y) || (X < Y - y);
+}
 
 extern util::pose v_current_pos;
 extern util::pose v_goto_pos;
