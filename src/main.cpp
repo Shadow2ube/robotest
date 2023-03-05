@@ -254,45 +254,38 @@ void auton_skills() { // newest
   brake(false);
 }
 
-// void auton_right() {
-//   brake(true);
-//   m_flywheel = -115;
-//   pros::delay(1000);
-//   intake(true);
-//   forward(1200, 70);
-//   pros::delay(500);
-//   turn(160, true);
-//   // backward(100);
-//   pros::delay(1500);
-//   m_feed = 127;
-//   pros::delay(290);
-//   intake(false);
-//   m_feed = 0;
-//   pros::delay(1500);
-//   intake(true);
-//   m_feed = 127;
-//   pros::delay(310);
-//   intake(false);uint8_t port
-//   m_feed = 0;
-//   pros::delay(1200);
-//   intake(true);
-//   m_feed = 127;
-//   pros::delay(330);
-//   intake(false);
-//   m_feed = 0;
-//   // pros::delay(2000);
-//   turn(300);
-//   right(150);
-//   forward(1000);
-
-//   brake(false);
-// }
-
 void auton_right() {
-  // flywheel(50);
-  while (true) {
-    pros::delay(2);
-  }
+  brake(true);
+  m_flywheel = -115;
+  pros::delay(1000);
+  intake(true);
+  forward(1200, 70);
+  pros::delay(500);
+  turn(160, true);
+  // backward(100);
+  pros::delay(1500);
+  m_feed = 127;
+  pros::delay(290);
+  intake(false);
+  m_feed = 0;
+  pros::delay(1500);
+  intake(true);
+  m_feed = 127;
+  pros::delay(310);
+  intake(false);uint8_t port
+  m_feed = 0;
+  pros::delay(1200);
+  intake(true);
+  m_feed = 127;
+  pros::delay(330);
+  intake(false);
+  m_feed = 0;
+  // pros::delay(2000);
+  turn(300);
+  right(150);
+  forward(1000);
+
+  brake(false);
 }
 
 void auton_left() {
