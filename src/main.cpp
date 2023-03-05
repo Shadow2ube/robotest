@@ -31,7 +31,8 @@
   }
 
 // int idle = -127;
-int idle = -100;
+int idle = -90;
+int slow_idle = -70;
 float flywheel_setpoint = idle;
 
 int curr_volt = 0;
@@ -114,6 +115,7 @@ void competition_initialize() {}
 
 // int idle = -105;
 bool is_idle = true;
+bool is_slow_idle = false;
 
 // void auton_skills() { // old
 //   brake(true);
@@ -272,8 +274,8 @@ void auton_right() {
   intake(true);
   m_feed = 127;
   pros::delay(310);
-  intake(false);uint8_t port
-  m_feed = 0;
+  intake(false);
+  uint8_t port m_feed = 0;
   pros::delay(1200);
   intake(true);
   m_feed = 127;
@@ -355,12 +357,24 @@ void opcontrol() {
          intake(true), controller.get_digital(E_CONTROLLER_DIGITAL_R2),
          intake(true, 127, true), intake(false));
 
-    IEIE(controller.get_digital(E_CONTROLLER_DIGITAL_L1), flywheel(-127),
-         is_idle, flywheel(idle), flywheel(0));
+    if (controller.get_digital(E_CONTROLLER_DIGITAL_L1)) {
+      flywheel(-100)
+    } else if (is_idle && !is_slow_idle) {
+      flywheel(idle)
+    } else if (is_idle && is_slow_idle) {
+      flywheel(slow_idle);
+    }
+    else {
+      flywheel(0)
+    };
 
     IE(
         controller.get_digital(E_CONTROLLER_DIGITAL_R1), { m_feed = 110; },
         m_feed = 0;);
+
+    if (controller.get_digital_new_press(E_CONTROLLER_DIGITAL_A)) {
+      is_slow_idle = !is_slow_idle;
+    }
 
     if (controller2.get_digital(E_CONTROLLER_DIGITAL_L1) &&
         controller2.get_digital(E_CONTROLLER_DIGITAL_R1) &&
