@@ -51,9 +51,9 @@ void t_update_flywheel(void *param) {
   }
 }
 
-void flywheel(int speed = -127) {
+void flywheel(int speed = -100) {
   speed *= speed > 0 ? -1 : 1;
-  flywheel_setpoint = speed * 0.7874015748031497; // speed * k = voltage
+  flywheel_setpoint = speed; // speed * k = voltage
 }
 
 void t_update_colors(void *param) {
@@ -190,7 +190,7 @@ bool is_slow_idle = false;
 //   brake(false);
 // }
 
-void auton_skills() { // newest
+void auton_skills(bool half = false) { // newest
   brake(true);
   flywheel(100);
   // flywheel(0);
@@ -201,11 +201,14 @@ void auton_skills() { // newest
   forward(170);
   turn(40);
 
+// #pragma region volley 1 => preloads
+//   intake(true, 100);
+//   m_feed = 127;
+//   pros::delay(2000);
+//   m_feed = 0;
+// #pragma endregion
 #pragma region volley 1 => preloads
-  intake(true, 100);
-  m_feed = 127;
-  pros::delay(2000);
-  m_feed = 0;
+  volley(2);
 #pragma endregion
 
   turn(215, true);
@@ -222,11 +225,16 @@ void auton_skills() { // newest
   turn(380);
   pros::delay(250);
 
+// #pragma region volley 2 => 3 stack
+//   m_feed = 127;
+//   pros::delay(3000);
+//   m_feed = 0;
+// #pragma endregion
 #pragma region volley 2 => 3 stack
-  m_feed = 127;
-  pros::delay(3000);
-  m_feed = 0;
+  volley(3)
 #pragma endregion
+
+  if (half) goto skills_end; // skip other parts
 
   turn(350, true);
   right(80);
@@ -237,10 +245,13 @@ void auton_skills() { // newest
   pros::delay(1000);
   turn(500);
 
+// #pragma region volley 3 => 3 row
+//   m_feed = 127;
+//   pros::delay(3000);
+//   m_feed = 0;
+// #pragma endregion
 #pragma region volley 3 => 3 row
-  m_feed = 127;
-  pros::delay(3000);
-  m_feed = 0;
+  volley(3);
 #pragma endregion
 
   turn(140);
@@ -251,6 +262,7 @@ void auton_skills() { // newest
   right(600, 100);
   backward(700); // roller
 
+skills_end: // clean up
   flywheel(0);
   intake(false);
   brake(false);
@@ -258,7 +270,7 @@ void auton_skills() { // newest
 
 void auton_right() {
   brake(true);
-  m_flywheel = -115;
+  m_flywheel = -105;
   pros::delay(1000);
   intake(true);
   forward(1200, 70);
@@ -275,7 +287,7 @@ void auton_right() {
   m_feed = 127;
   pros::delay(310);
   intake(false);
-  uint8_t port m_feed = 0;
+  m_feed = 0;
   pros::delay(1200);
   intake(true);
   m_feed = 127;
@@ -290,17 +302,21 @@ void auton_right() {
   brake(false);
 }
 
+// void auton_left() {
+//   brake(true);
+//   m_flywheel = -100;
+//   backward(100);
+//   forward(50);
+//   turn(350, true);
+//   intake(true);
+//   m_feed = 127;
+//   pros::delay(2000);
+//   m_flywheel = 0;
+//   brake(false);
+// }
+
 void auton_left() {
-  brake(true);
-  m_flywheel = -100;
-  backward(100);
-  forward(50);
-  turn(350, true);
-  intake(true);
-  m_feed = 127;
-  pros::delay(2000);
-  m_flywheel = 0;
-  brake(false);
+    auton_skills(true);
 }
 
 void autonomous() {
@@ -341,6 +357,7 @@ void opcontrol() {
   if (!pros::competition::is_connected()) {
     //   // run auton here if not in competition
     // auton_right();
+    // autonomous();
   }
 
   while (true) {
@@ -358,14 +375,13 @@ void opcontrol() {
          intake(true, 127, true), intake(false));
 
     if (controller.get_digital(E_CONTROLLER_DIGITAL_L1)) {
-      flywheel(-100)
+      flywheel(-100);
     } else if (is_idle && !is_slow_idle) {
-      flywheel(idle)
+      flywheel(idle);
     } else if (is_idle && is_slow_idle) {
       flywheel(slow_idle);
-    }
-    else {
-      flywheel(0)
+    } else {
+      flywheel(0);
     };
 
     IE(

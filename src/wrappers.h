@@ -118,4 +118,34 @@ inline void brake(bool on) {
   }
 }
 
+inline void wait_until_speed(int speed) {
+  speed *= speed > 0 ? -1 : 1;
+  while (m_flywheel.get_actual_velocity() != speed) {
+    pros::delay(2);
+  }
+
+}
+
+/**
+ * @brief Shoots X number of discs in a row
+ * Shoots a number of discs in a row
+ * Blocks thread until complete
+ * 
+ * @param discs number of discs to shoot
+ * @param fw_speed speed of flywheel
+ */
+inline void volley(int discs, int fw_speed) {
+  bool ri = run_intake;
+  intake(false);
+  for (int i = 0; i < discs; ++i) {
+    wait_until_speed(fw_speed);
+    intake(true);
+    m_feed = 127;
+    pros::delay(130); // just shoot 1
+    intake(false);
+    m_feed = 0;
+  }
+  intake(ri);
+}
+
 #endif

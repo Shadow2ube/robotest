@@ -20,10 +20,10 @@ struct pid_controller {
                 kD * ((error - prev_error) / iteration_time)) *
                precision;
 
-    std::cout << "\033[2J\033[1;1H"
-              << "error: " << error
-              << "\ncurrent rpm: " << m_flywheel.get_actual_velocity()
-              << std::endl;
+    // std::cout << "\033[2J\033[1;1H"
+    //           << "error: " << error
+    //           << "\ncurrent rpm: " << m_flywheel.get_actual_velocity()
+    //           << std::endl;
     prev_error = error;
     func(out);
   }
@@ -39,7 +39,7 @@ static pid_controller flywheel_controller = {
     .iteration_time = 0.002,
     .prev_error = 0,
     .func = [](float velocity) {
-      std::cout << "output: " << velocity << std::endl;
+      // std::cout << "output: " << velocity << std::endl;
       m_flywheel.move_voltage(velocity);
     }};
 
