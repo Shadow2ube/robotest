@@ -6,6 +6,9 @@
 #include "pros/optical.hpp"
 #include "util.h"
 
+#ifndef CONFIG_H
+#define CONFIG_H
+
 /**
  * @brief Equal to, plus or minus
  *
@@ -63,3 +66,5 @@ extern pros::Optical s_optical;
 extern pros::ADIDigitalOut p_end_right;
 extern pros::ADIDigitalOut p_end_left;
 extern pros::ADIDigitalOut p_end_main;
+
+#endif
