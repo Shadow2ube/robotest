@@ -1,4 +1,5 @@
 #include "main.h"
+#include "autons.h"
 #include "config.h"
 #include "location.h"
 #include "pid.h"
@@ -30,14 +31,7 @@
     }                                                                          \
   }
 
-// int idle = -127;
-int idle = -90;
-int slow_idle = -70;
-float flywheel_setpoint = idle;
-
-int curr_volt = 0;
 void t_update_flywheel(void *param) {
-  // flywheel_voltage = -12000;
   flywheel_setpoint = -50;
   while (true) {
     pros::delay(2);
@@ -45,15 +39,8 @@ void t_update_flywheel(void *param) {
       continue;
     flywheel_controller.calc(flywheel_setpoint,
                              m_flywheel.get_actual_velocity());
-    // flywheel_controller.calc(-50,
-    //  m_flywheel.get_actual_velocity());
     std::cout << (m_flywheel.get_voltage()) << std::endl;
   }
-}
-
-void flywheel(int speed = -100) {
-  speed *= speed > 0 ? -1 : 1;
-  flywheel_setpoint = speed; // speed * k = voltage
 }
 
 void t_update_colors(void *param) {
@@ -103,9 +90,6 @@ void initialize() {
   Task update_flywheel(t_update_flywheel);
   Task update_colors(t_update_colors);
   Task update_location(t_update_location);
-
-  // pros::screen::set_pen(0xFF00FF);
-  // pros::screen::draw_rect(1, 1, 479, 239);
   selector::init();
 }
 
@@ -113,165 +97,8 @@ void disabled() {}
 
 void competition_initialize() {}
 
-// int idle = -105;
 bool is_idle = true;
 bool is_slow_idle = false;
-
-// void auton_skills() { // old
-//   brake(true);
-//   m_flywheel = -90;
-//   pros::delay(1000);
-//   intake(true);
-//   forward(1200, 70);
-//   pros::delay(500);
-//   // turn(130, true, 127);
-//   backward(500);
-//   right(800);
-//   backward(380);
-//   forward(100);
-//   turn(335);
-//   forward(800);
-//   m_feed = 127;
-//   // intake(true, 80);
-//   pros::delay(2000);
-//   turn(175, true);
-//   right(200);
-//   forward(100);
-//   p_end_left.set_value(true);
-//   p_end_main.set_value(true);
-//   pros::delay(1000);
-//   backward(500);
-//   brake(false);
-// }
-
-void auton_skills(bool half = false) { // newest
-  brake(true);
-  flywheel(100);
-  // flywheel(0);
-
-  pros::delay(2000); // rev up time
-  intake(true);
-  backward(180);
-  forward(170);
-  turn(40);
-
-// #pragma region volley 1 => preloads
-//   intake(true, 100);
-//   m_feed = 127;
-//   pros::delay(2000);
-//   m_feed = 0;
-// #pragma endregion
-#pragma region volley 1 => preloads
-  volley(2);
-#pragma endregion
-
-  turn(215, true);
-  pros::delay(50);
-  right(150);
-  pros::delay(50);
-  intake(false);
-  forward(950);
-  intake(true);
-  // left(150);
-  forward(1500, 60);
-  pros::delay(500);
-  // backward(500);
-  turn(380);
-  pros::delay(250);
-
-// #pragma region volley 2 => 3 stack
-//   m_feed = 127;
-//   pros::delay(3000);
-//   m_feed = 0;
-// #pragma endregion
-#pragma region volley 2 => 3 stack
-  volley(3)
-#pragma endregion
-
-  if (half) goto skills_end; // skip other parts
-
-  turn(350, true);
-  right(80);
-  // forward(750);
-  // forward(750);
-  // right(150);
-  forward(2300, 80);
-  pros::delay(1000);
-  turn(500);
-
-// #pragma region volley 3 => 3 row
-//   m_feed = 127;
-//   pros::delay(3000);
-//   m_feed = 0;
-// #pragma endregion
-#pragma region volley 3 => 3 row
-  volley(3);
-#pragma endregion
-
-  turn(140);
-  backward(700);
-  right(1000, 80);
-  left(200, 100);
-  forward(300, 100);
-  right(600, 100);
-  backward(700); // roller
-
-skills_end: // clean up
-  flywheel(0);
-  intake(false);
-  brake(false);
-}
-
-void auton_right() {
-  brake(true);
-  m_flywheel = -105;
-  pros::delay(1000);
-  intake(true);
-  forward(1200, 70);
-  pros::delay(500);
-  turn(160, true);
-  // backward(100);
-  pros::delay(1500);
-  m_feed = 127;
-  pros::delay(290);
-  intake(false);
-  m_feed = 0;
-  pros::delay(1500);
-  intake(true);
-  m_feed = 127;
-  pros::delay(310);
-  intake(false);
-  m_feed = 0;
-  pros::delay(1200);
-  intake(true);
-  m_feed = 127;
-  pros::delay(330);
-  intake(false);
-  m_feed = 0;
-  // pros::delay(2000);
-  turn(300);
-  right(150);
-  forward(1000);
-
-  brake(false);
-}
-
-// void auton_left() {
-//   brake(true);
-//   m_flywheel = -100;
-//   backward(100);
-//   forward(50);
-//   turn(350, true);
-//   intake(true);
-//   m_feed = 127;
-//   pros::delay(2000);
-//   m_flywheel = 0;
-//   brake(false);
-// }
-
-void auton_left() {
-    auton_skills(true);
-}
 
 void autonomous() {
   switch (selector::auton) {
@@ -310,7 +137,6 @@ void handle_drive() {
 void opcontrol() {
   if (!pros::competition::is_connected()) {
     //   // run auton here if not in competition
-    // auton_right();
     // autonomous();
   }
 
@@ -354,21 +180,11 @@ void opcontrol() {
       if (controller2.get_digital(E_CONTROLLER_DIGITAL_X))
         p_end_main.set_value(1);
 
-      if (controller2.get_digital(E_CONTROLLER_DIGITAL_Y))
-        p_end_left.set_value(1);
-
-      if (controller2.get_digital(E_CONTROLLER_DIGITAL_A))
-        p_end_right.set_value(1);
+      // if (controller2.get_digital(E_CONTROLLER_DIGITAL_Y))
+      //   p_end_left.set_value(1);
 
       // endregion
     }
-
-    if (controller2.get_digital(E_CONTROLLER_DIGITAL_DOWN)) {
-      std::cout << "AAA";
-      idle = -110;
-    } else
-      idle = -127;
-
     pros::delay(2);
   }
 }

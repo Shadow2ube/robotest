@@ -78,8 +78,7 @@ inline void turn(int t, bool right = false, int s = 127) {
   m_br = 0;
 }
 
-extern bool run_intake; // from config.cpp
-inline void intake(bool run, int speed=127, bool bwd = false) {
+inline void intake(bool run, int speed = 127, bool bwd = false) {
   if (run_intake) {
     m_suck = run ? (bwd ? -speed : speed) : 0;
   } else {
@@ -88,22 +87,9 @@ inline void intake(bool run, int speed=127, bool bwd = false) {
   }
 }
 
-inline void shoot(bool on) {
-  intake(on, true);
-  m_feed = on ? 63 : 0;
-}
-
-inline void shoot(int s = 100) {
-  intake(true, true);
-  m_feed = 63;
-  pros::delay(1000);
-  intake(false);
-  m_feed = 0;
-}
-
-inline void brake(bool on) {
+inline void brake(bool on,
+                  pros::motor_brake_mode_e brake_mode = E_MOTOR_BRAKE_HOLD) {
   // auto brake_mode = E_MOTOR_BRAKE_BRAKE;
-  auto brake_mode = E_MOTOR_BRAKE_HOLD;
   auto coast_mode = E_MOTOR_BRAKE_COAST;
   if (on) {
     m_fr.set_brake_mode(brake_mode);
@@ -118,7 +104,7 @@ inline void brake(bool on) {
   }
 }
 
-inline void wait_until_speed(int speed, int pm=5) {
+inline void wait_until_speed(int speed, int pm = 5) {
   speed *= speed > 0 ? -1 : 1;
   while (NPM<int>(m_flywheel.get_actual_velocity(), speed, pm)) {
     pros::delay(2);
@@ -129,7 +115,7 @@ inline void wait_until_speed(int speed, int pm=5) {
  * @brief Shoots X number of discs in a row
  * Shoots a number of discs in a row
  * Blocks thread until complete
- * 
+ *
  * @param discs number of discs to shoot
  * @param fw_speed speed of flywheel
  */
@@ -145,6 +131,11 @@ inline void volley(int discs, int fw_speed) {
     m_feed = 0;
   }
   intake(ri);
+}
+
+inline void flywheel(int speed = -100) {
+  speed *= speed > 0 ? -1 : 1;
+  flywheel_setpoint = speed; // speed * k = voltage
 }
 
 #endif

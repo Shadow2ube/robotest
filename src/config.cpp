@@ -14,7 +14,11 @@
 #include <atomic>
 #include <cwchar>
 
+// random variables
 bool run_intake = true;
+const int idle = -90;
+const int slow_idle = -70;
+float flywheel_setpoint = idle;
 
 util::pose v_current_pos = {0, 0, 0};
 util::pose v_goto_pos = {0, 0, 0};
