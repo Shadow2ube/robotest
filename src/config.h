@@ -15,6 +15,7 @@
 // extern const float c_dist_per_deg; //mm
 
 extern util::pose v_current_pos;
+extern util::pose v_goto_pos;
 
 extern pros::Controller controller;
 extern pros::Controller controller2;

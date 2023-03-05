@@ -1,4 +1,5 @@
 #include "config.h"
+#include "pros/motors.h"
 
 #ifndef WRAPPERS_H
 #define WRAPPERS_H
@@ -78,9 +79,9 @@ inline void turn(int t, bool right = false, int s = 127) {
 }
 
 extern bool run_intake; // from config.cpp
-inline void intake(bool run, bool bwd = false) {
+inline void intake(bool run, int speed=127, bool bwd = false) {
   if (run_intake) {
-    m_suck = run ? (bwd ? -127 : 127) : 0;
+    m_suck = run ? (bwd ? -speed : speed) : 0;
   } else {
     m_suck = 0;
     // run_intake = true;
@@ -101,16 +102,19 @@ inline void shoot(int s = 100) {
 }
 
 inline void brake(bool on) {
+  // auto brake_mode = E_MOTOR_BRAKE_BRAKE;
+  auto brake_mode = E_MOTOR_BRAKE_HOLD;
+  auto coast_mode = E_MOTOR_BRAKE_COAST;
   if (on) {
-    m_fr.set_brake_mode(E_MOTOR_BRAKE_BRAKE);
-    m_br.set_brake_mode(E_MOTOR_BRAKE_BRAKE);
-    m_fl.set_brake_mode(E_MOTOR_BRAKE_BRAKE);
-    m_bl.set_brake_mode(E_MOTOR_BRAKE_BRAKE);
+    m_fr.set_brake_mode(brake_mode);
+    m_br.set_brake_mode(brake_mode);
+    m_fl.set_brake_mode(brake_mode);
+    m_bl.set_brake_mode(brake_mode);
   } else {
-    m_fr.set_brake_mode(E_MOTOR_BRAKE_COAST);
-    m_br.set_brake_mode(E_MOTOR_BRAKE_COAST);
-    m_fl.set_brake_mode(E_MOTOR_BRAKE_COAST);
-    m_bl.set_brake_mode(E_MOTOR_BRAKE_COAST);
+    m_fr.set_brake_mode(coast_mode);
+    m_br.set_brake_mode(coast_mode);
+    m_fl.set_brake_mode(coast_mode);
+    m_bl.set_brake_mode(coast_mode);
   }
 }
 
